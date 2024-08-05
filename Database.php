@@ -11,7 +11,7 @@ class Database implements DatabaseInterface
     private mysqli $mysqli;
 
     /** @var string */
-    private const string SKIP = '__SKIP__'; // Специальное значение для пропуска
+    private const string SKIP = '__SKIP__';
 
     public function __construct(mysqli $mysqli)
     {
@@ -60,12 +60,21 @@ class Database implements DatabaseInterface
         return self::SKIP;
     }
 
-    private function intval($value)
+    /**
+     * @param mixed $value
+     * @return int|string
+     */
+    private function intval(mixed $value): int|string
     {
         return is_null($value) ? 'NULL' : intval($value);
     }
 
-    private function escapeValue($value)
+    /**
+     * @param mixed $value
+     * @return float|int|string
+     * @throws Exception
+     */
+    private function escapeValue(mixed $value): float|int|string
     {
         if (is_null($value)) {
             return 'NULL';
@@ -80,6 +89,11 @@ class Database implements DatabaseInterface
         }
     }
 
+    /**
+     * @param array $array
+     * @return string
+     * @throws Exception
+     */
     private function formatArray(array $array): string
     {
         if ($this->isAssoc($array)) {
@@ -96,7 +110,11 @@ class Database implements DatabaseInterface
         }
     }
 
-    private function formatIdentifier($identifier): string
+    /**
+     * @param string|array $identifier
+     * @return string
+     */
+    private function formatIdentifier(string|array $identifier): string
     {
         if (is_array($identifier)) {
             return implode(', ', array_map(function ($item) {
@@ -107,6 +125,10 @@ class Database implements DatabaseInterface
         }
     }
 
+    /**
+     * @param array $array
+     * @return bool
+     */
     private function isAssoc(array $array): bool
     {
         return array_keys($array) !== range(0, count($array) - 1);

@@ -10,7 +10,10 @@ enum SpecifiersEnum: string
     case IDENTIFIER = '#';
     case DEFAULT = '';
 
-    public function specificationFunction()
+    /**
+     * @return string
+     */
+    public function specificationFunction(): string
     {
         return match ($this) {
             self::INT => 'intval',
@@ -21,12 +24,18 @@ enum SpecifiersEnum: string
         };
     }
 
+    /**
+     * @return array
+     */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
     }
 
-    public static function placeholders()
+    /**
+     * @return string
+     */
+    public static function placeholders(): string
     {
         return '/\?(' . implode("|",self::values()) . ')?/';
     }
